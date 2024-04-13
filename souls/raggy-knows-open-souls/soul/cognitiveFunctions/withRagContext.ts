@@ -2,6 +2,8 @@ import { ChatMessageRoleEnum, WorkingMemory, createCognitiveStep, indentNicely, 
 
 const MAX_QA_MEMORY_LENGTH = 700
 
+const model = "exp/mixtral-8x22b-instruct";
+
 const withRagContext = async (workingMemory: WorkingMemory) => {
   const name = workingMemory.soulName
   const { log } = useActions()
@@ -16,6 +18,7 @@ const withRagContext = async (workingMemory: WorkingMemory) => {
 
       ${name} ponders the conversation so far and decides on three questions they should answer from their memory.
     `,
+    { model }
   )
 
   const blankAnsweringMemory = workingMemory.slice(0, 1)
@@ -53,7 +56,8 @@ const withRagContext = async (workingMemory: WorkingMemory) => {
         `).join("\n")}
 
         ${name} considers their <Memory> and answers the question: ${question}
-    `
+    `,
+    { model }
     )
 
     return {
